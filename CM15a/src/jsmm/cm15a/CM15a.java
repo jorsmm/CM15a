@@ -17,8 +17,6 @@ import javax.usb.util.UsbUtil;
 import jsmm.cm15a.CM15aData.Function;
 
 public class CM15a implements ReadDataListener {
-
-
 	// USB product & vendor id
 	private static final short CM15A_VENDORID=Utils.getShort("vendorid", (short)0x0bc7);
 	private static final short CM15A_PRODUCTID=Utils.getShort("productid", (short)0x0001);
