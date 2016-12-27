@@ -25,7 +25,6 @@ public class HueSensor {
 		return lastupdated;
 	}
 	public static synchronized void start() {
-		Utils.log("start");
 		if (hilo==null) {
 			hilo=new Thread(new Runnable() {
 				@Override
@@ -63,7 +62,6 @@ public class HueSensor {
 	}
 
 	public static synchronized void stop() {
-		Utils.log("stop");
 		if (running) {
 			running=false;
 			hilo=null;
