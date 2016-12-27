@@ -13,8 +13,19 @@ public class HueSensor {
 	private static Thread hilo;
 	private static boolean lastPresence=false;
 	private static boolean running=false;
+	private static String lastupdated="";
 
-	protected static synchronized void start() {
+	public static boolean isRunning() {
+		return running;
+	}
+	public static boolean isPresence() {
+		return lastPresence;
+	}
+	public static String getLastupdated() {
+		return lastupdated;
+	}
+	public static synchronized void start() {
+		Utils.log("start");
 		if (hilo==null) {
 			hilo=new Thread(new Runnable() {
 				@Override
@@ -51,7 +62,8 @@ public class HueSensor {
 		}
 	}
 
-	protected static synchronized void stop() {
+	public static synchronized void stop() {
+		Utils.log("stop");
 		if (running) {
 			running=false;
 			hilo=null;
@@ -101,6 +113,7 @@ public class HueSensor {
 				JSONObject jresul=(JSONObject) jsonParser.parse(resul);
 				JSONObject jstate=(JSONObject)jresul.get("state");
 				boolean presence=(boolean)jstate.get("presence");
+				lastupdated=(String)jstate.get("lastupdated");
 				//Utils.log("requestSensor.presence="+presence);
 				return presence;
 			} catch (ParseException e) {

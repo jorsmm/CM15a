@@ -97,5 +97,13 @@ public class DomoServlet extends HttpServlet {
 		Utils.logErr("####DomoServlet.destroy()");
     	CM15aSingleton cm15aSingleton=CM15aSingleton.getInstance();
     	cm15aSingleton.destroy();
+		HueSensor.stop();
+		// jsmm 27/12/2016 espera 1,5s pues el sondeo dle hilo es de 1000
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
