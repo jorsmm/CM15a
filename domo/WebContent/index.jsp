@@ -74,8 +74,9 @@ function navidad(param) {
 <hr/>
 <br/>
 <br/>
+<hr/>
 <a class="verde" onclick="navidad('ON')">Pulsa para encender NAVIDAD</a>
-<br/>
+<hr/>
 <a class="rojo" onclick="navidad('OFF')">Pulsa para apagar NAVIDAD</a>
 <hr/>
 <br/>
