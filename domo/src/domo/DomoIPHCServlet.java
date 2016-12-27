@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import jsmm.cm15a.Utils;
-import jsmm.cm15a.CM15aData.Function;
 
 /**
  * Servlet implementation class DomoServlet

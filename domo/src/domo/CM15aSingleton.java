@@ -1,8 +1,5 @@
 package domo;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,6 +16,7 @@ public class CM15aSingleton implements CM15aDataListener {
 
 	private static final char HC_NAVIDAD = 'A';
 	private static final int DEVICE_NAVIDAD = 3;
+	private static final int DEVICE_SENSOR_NAVIDAD = 1;
 
 	////////////////////////////////////////////////////////////
 	private static CM15aSingleton instance;
@@ -64,6 +62,15 @@ public class CM15aSingleton implements CM15aDataListener {
 				Utils.log("Singleton: EXEC NAVIDAD");
 				command=new String[]{"/Applications/XAMPP/htdocs/domo/navidad.sh",cm15aData.getFunction().toString().toLowerCase()};
 			}
+			else if (cm15aData.getHc()==HC_NAVIDAD && cm15aData.getDevice()==DEVICE_SENSOR_NAVIDAD) {
+				Utils.log("Singleton: EXEC SENSOR NAVIDAD="+cm15aData.getFunction().toString());
+				if ("on".equalsIgnoreCase(cm15aData.getFunction().toString())) {
+					HueSensor.start();
+				}
+				else {
+					HueSensor.stop();
+				}
+			}
 			execCommand(command);
 		}
 		
@@ -87,27 +94,7 @@ public class CM15aSingleton implements CM15aDataListener {
 	protected void execCommand(String[] curlCommand) {
 		try {
 			Utils.log("Singleton: exec:"+Arrays.toString(curlCommand));
-			Process p= Runtime.getRuntime().exec(curlCommand);
-/*
-			InputStream es =p.getErrorStream();
-			InputStream is =p.getInputStream();
-			BufferedReader br = new BufferedReader (new InputStreamReader (is));
-			while (true) {
-				String linea=br.readLine();
-				if (linea==null) {
-					break;
-				}
-				Utils.log("Singleton exec res:"+linea);
-			}
-			br = new BufferedReader (new InputStreamReader (es));
-			while (true) {
-				String linea=br.readLine();
-				if (linea==null) {
-					break;
-				}
-				Utils.logErr("Singleton exec err res:"+linea);
-			}
-*/
+			Runtime.getRuntime().exec(curlCommand);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
