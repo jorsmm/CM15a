@@ -18,8 +18,8 @@ import jsmm.cm15a.CM15aData.Function;
 
 public class CM15a implements ReadDataListener {
 	// USB product & vendor id
-	private static final short CM15A_VENDORID=Utils.getShort("vendorid", (short)0x0bc7);
-	private static final short CM15A_PRODUCTID=Utils.getShort("productid", (short)0x0001);
+	private static final short CM15A_VENDORID=0x0bc7;
+	private static final short CM15A_PRODUCTID=0x0001;
 
 	// control read endpoint
 	private static final byte AHP_EP1_READ=(byte) 0x81;
@@ -300,7 +300,23 @@ public class CM15a implements ReadDataListener {
 		}
 		// RF received
 		else if (buffer[0]==(byte)0x5d) {
+			// llegan cosas como (varian los 2 ultimos sin patron fijo): 
+			// 0x5d 0x20 0x60 0x9f 0x88 0x75
+			// 0x5d 0x20 0x60 0x9f 0x08 0xf7
 			Utils.log("Received RF");
+			short len=buffer[1];
+			if (len>=2) {
+				Utils.logHexBuffer("Buffer de RF=>", buffer, length);
+				int device = CM15aData.getDevice(buffer,4);
+				Utils.logErr("Received [3] Inventamos d1 "+(device==13?Function.ON:Function.OFF));
+				if (this.cm15aDataListener!=null) {
+					// jsmm 09/12/2017 nos inventamos enviar d1 on/off segun si se ulsan las 2 primeras filas o las 2 últimas
+					this.cm15aDataListener.receive(new CM15aData('d', 1, device==13?Function.ON:Function.OFF, 0));
+				}
+			}
+			else {
+				Utils.logErr("Received incorrect length:"+len+", for 5A");
+			}
 		}
 		// module/controller asking for clock adjust
 		else if (buffer[0]==(byte)0xa5) {
